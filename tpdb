@@ -1,0 +1,99 @@
+U20210326 -Diego José Campos Bonilla
+
+/Seleccione todos los datos de la tabla Departament del schema HumanResources/
+SELECCIONE * DE Recursos Humanos.Departamento;
+
+/*Seleccione un agrupamiento de los nombres de grupos que existen en la tabla
+Departamento del esquema Recursos Humanos*/
+
+SELECCIONE GroupName, COUNT(*) AS GroupCount
+DE Departamento.de.RecursosHumanos
+AGRUPAR POR NombreGrupo;
+
+/*Seleccione todos los departamentos ordenándolos en orden descendente.*/
+SELECCIONAR *
+DE Departamento.de.RecursosHumanos
+ORDEN POR IDDepartamento DESC;
+
+/*Seleccione todos los departamentos ordenándolos en orden ascendente.*/
+SELECCIONAR *
+DE Departamento.de.RecursosHumanos
+ORDEN POR Departamento ID ASC;
+
+/*Seleccione todos los empleados de la tabla Employee del schema Human Resources.*/
+SELECCIONE * DE Recursos Humanos.Empleado;
+
+/*Seleccione todos los empleados de la tabla Employee del schema Human Resources donde
+el género sea masculino.
+*/
+SELECCIONAR *
+DE Recursos Humanos.Empleado
+DONDE Género = 'M';
+
+/*Seleccione todos los empleados de la tabla Employee del schema Human Resources donde
+el nivel de organización sea mayor a 3*/
+SELECCIONAR *
+DE Recursos Humanos.Empleado
+DONDE NivelOrganización > 3;
+
+/*. Seleccione todos los empleados de la tabla Employee del schema Human Resources donde
+el nivel de organización sea mayor e igual a 2 y que el género sea femenino.
+*/
+SELECCIONAR *
+DE Recursos Humanos.Empleado
+DONDE NivelOrganización >= 2 Y Género = 'F';
+
+/*Selección los campos BusinessEntityID,NationalIDNumber de la tabla Employee del
+schema Human Resources donde los jobtitle sean Marketing Assistant o Design Engineer.*/
+SELECCIONE BusinessEntityID, NationalIDNumber
+DE Recursos Humanos.Empleado
+WHERE JobTitle IN ('Asistente de marketing', 'Ingeniero de diseño');
+
+/*. Seleccione todos los empleados de la tabla Employee del schema Human Resources que
+están entre la fecha de nacimiento del 1 de enero de 1969 y 31 de diciembre de 1972.*/
+SELECCIONAR *
+DE Recursos Humanos.Empleado
+DONDE Fecha de nacimiento ENTRE '1969-01-01' Y '1972-12-31';
+
+/*De la tabla Employee del schema Human Resources Calcule el total de ah pagar por horas
+de vacaciones si se conecta que cada hora cuesta $8.00.*/
+SELECCIONE BusinessEntityID, VacationHours, VacationHours * 8.00 AS TotalVacationCost
+DE RecursosHumanos.Empleado;
+
+/*De la tabla Production.ProductSubcategory muestre cuántas subcategorías hay registradas
+por categoría*/
+SELECCIONE ProductCategoryID, COUNT(*) AS SubcategoryCount
+DE Producción.ProductoSubcategoría
+GROUP BY ProductCategoryID;
+
+/*De la tabla Sales.Customer mostrar cuantos clientes existen registrados por territorios*/
+SELECCIONE TerritoryID, COUNT(*) AS CustomerCount
+DE Ventas.Cliente
+GRUPO POR TerritoryID;
+
+/* De la tabla sales.SalesOrderHeader mostrar la suma total del Sub Total de compra según el
+IdCustomer que se coloca.*/
+SELECCIONE CustomerID, SUM(SubTotal) AS TotalSubTotal
+FROM Ventas.SalesOrderHeader
+GRUPO POR IDENTIFICADOR DE CLIENTE;
+
+/*De la tabla Sales. CreditCard mostrar cuantas tarjetas segun su tipo estan registradas en el
+sistema.*/
+SELECCIONE Tipo de tarjeta, CONTAR(*) COMO Número de tarjetas
+DESDE Ventas.Tarjeta.de.crédito
+AGRUPAR POR Tipo de Tarjeta;
+
+/*De la tabla Sales.SalesOrderDetail evaluar Linea total de compra que es el total de la
+compra , si la compra es mayor de $1000.00 realizar un descuento del 10% y mostrar el
+nuevo total a pagar si es mayor $1500.00 realizar un descuento del 14% y mostrar el
+nuevo total a pagar si es mayor de $2000.00 realizar un descuento del 18% y mostrar el
+nuevo total a pagar.*/
+SELECCIONE ID de pedido de ventas,
+Precio unitario * Cantidad de pedido AS TotalBeforeDiscount,
+CASO
+CUANDO Precio unitario * Cantidad de pedido > 2000 ENTONCES (Precio unitario * Cantidad de pedido) * 0,82
+CUANDO Precio unitario * Cantidad de pedido > 1500 ENTONCES (Precio unitario * Cantidad de pedido) * 0,86
+CUANDO Precio unitario * Cantidad de pedido > 1000 ENTONCES (Precio unitario * Cantidad de pedido) * 0,90
+ELSE Precio unitario * Cantidad de pedido
+TERMINAR COMO TotalDespuésDescuento
+FROM Ventas.DetallePedidoVentas;
